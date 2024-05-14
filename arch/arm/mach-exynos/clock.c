@@ -784,8 +784,13 @@ static unsigned long exynos4x12_get_uart_clk(int dev_index)
 
 static unsigned long exynos4_get_mmc_clk(int dev_index)
 {
+#ifdef CONFIG_ITOP4412
+	struct exynos4x12_clock *clk =
+		(struct exynos4x12_clock *)samsung_get_base_clock();
+#else
 	struct exynos4_clock *clk =
 		(struct exynos4_clock *)samsung_get_base_clock();
+#endif
 	unsigned long uclk, sclk;
 	unsigned int sel, ratio, pre_ratio;
 	int shift = 0;
@@ -834,8 +839,13 @@ static unsigned long exynos4_get_mmc_clk(int dev_index)
 /* exynos4: set the mmc clock */
 static void exynos4_set_mmc_clk(int dev_index, unsigned int div)
 {
+#ifdef CONFIG_ITOP4412
+	struct exynos4x12_clock *clk =
+		(struct exynos4x12_clock *)samsung_get_base_clock();
+#else
 	struct exynos4_clock *clk =
 		(struct exynos4_clock *)samsung_get_base_clock();
+#endif
 	unsigned int addr, clear_bit, set_bit;
 
 	/*
@@ -913,8 +923,13 @@ static void exynos5420_set_mmc_clk(int dev_index, unsigned int div)
 /* get_lcd_clk: return lcd clock frequency */
 static unsigned long exynos4_get_lcd_clk(void)
 {
+#ifdef CONFIG_ITOP4412
+	struct exynos4x12_clock *clk =
+		(struct exynos4x12_clock *)samsung_get_base_clock();
+#else
 	struct exynos4_clock *clk =
 		(struct exynos4_clock *)samsung_get_base_clock();
+#endif
 	unsigned long pclk, sclk;
 	unsigned int sel;
 	unsigned int ratio;
@@ -923,7 +938,11 @@ static unsigned long exynos4_get_lcd_clk(void)
 	 * CLK_SRC_LCD0
 	 * FIMD0_SEL [3:0]
 	 */
+#ifdef CONFIG_ITOP4412
+	sel = readl(&clk->src_lcd);
+#else
 	sel = readl(&clk->src_lcd0);
+#endif
 	sel = sel & 0xf;
 
 	/*
@@ -944,7 +963,11 @@ static unsigned long exynos4_get_lcd_clk(void)
 	 * CLK_DIV_LCD0
 	 * FIMD0_RATIO [3:0]
 	 */
+#ifdef CONFIG_ITOP4412
+	ratio = readl(&clk->div_lcd);
+#else
 	ratio = readl(&clk->div_lcd0);
+#endif
 	ratio = ratio & 0xf;
 
 	pclk = sclk / (ratio + 1);
@@ -1064,8 +1087,13 @@ static unsigned long exynos5800_get_lcd_clk(void)
 
 void exynos4_set_lcd_clk(void)
 {
+#ifdef CONFIG_ITOP4412
+	struct exynos4x12_clock *clk =
+		(struct exynos4x12_clock *)samsung_get_base_clock();
+#else
 	struct exynos4_clock *clk =
 	    (struct exynos4_clock *)samsung_get_base_clock();
+#endif
 
 	/*
 	 * CLK_GATE_BLOCK
@@ -1087,7 +1115,11 @@ void exynos4_set_lcd_clk(void)
 	 * MIPI0_SEL		[12:15]
 	 * set lcd0 src clock 0x6: SCLK_MPLL
 	 */
+#ifdef CONFIG_ITOP4412
+	clrsetbits_le32(&clk->src_lcd, 0xf, 0x6);
+#else
 	clrsetbits_le32(&clk->src_lcd0, 0xf, 0x6);
+#endif
 
 	/*
 	 * CLK_GATE_IP_LCD0
@@ -1099,7 +1131,11 @@ void exynos4_set_lcd_clk(void)
 	 * CLK_PPMULCD0		[5]
 	 * Gating all clocks for FIMD0
 	 */
+#ifdef CONFIG_ITOP4412
+	setbits_le32(&clk->gate_ip_lcd, 1 << 0);
+#else
 	setbits_le32(&clk->gate_ip_lcd0, 1 << 0);
+#endif
 
 	/*
 	 * CLK_DIV_LCD0
@@ -1111,7 +1147,11 @@ void exynos4_set_lcd_clk(void)
 	 * MIPI0_PRE_RATIO	[23:20]
 	 * set fimd ratio
 	 */
+#ifdef CONFIG_ITOP4412
+	clrsetbits_le32(&clk->div_lcd, 0xf, 0x1);
+#else
 	clrsetbits_le32(&clk->div_lcd0, 0xf, 0x1);
+#endif
 }
 
 void exynos5_set_lcd_clk(void)

@@ -1192,3 +1192,5 @@ endif
 
 config IO_TRACE
 	bool
+
+source "common/itop4412/Kconfig"

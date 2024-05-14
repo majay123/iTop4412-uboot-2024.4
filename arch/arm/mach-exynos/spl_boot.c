@@ -46,10 +46,12 @@
 
 #define EXYNOS_COPY_SPI_FNPTR_ADDR	0x02020058
 #define SPI_FLASH_UBOOT_POS	(SEC_FW_SIZE + BL1_SIZE)
-#elif defined(CONFIG_ARCH_EXYNOS4)
+#elif defined(CONFIG_ARCH_EXYNOS4) 
+#ifndef CONFIG_ITOP4412
 #define COPY_BL2_SIZE		0x80000
 #define BL2_START_OFFSET	((CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)/512)
 #define BL2_SIZE_BLOC_COUNT	(COPY_BL2_SIZE/512)
+#endif
 #endif
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -261,8 +263,14 @@ void copy_uboot_to_ram(void)
 		break;
 #ifdef CONFIG_SUPPORT_EMMC_BOOT
 	case BOOT_MODE_EMMC:
+#ifdef CONFIG_ITOP4412
+	case BOOT_MODE_EMMC_SD:
+#endif
 		/* Set the FSYS1 clock divisor value for EMMC boot */
+#ifndef CONFIG_ITOP4412
+		/* just for exynos5 can be call */
 		emmc_boot_clk_div_set();
+#endif
 
 		copy_bl2_from_emmc = get_irom_func(EMMC44_INDEX);
 		end_bootop_from_emmc = get_irom_func(EMMC44_END_INDEX);

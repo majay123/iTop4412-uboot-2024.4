@@ -331,6 +331,18 @@ void fastboot_data_complete(char *response)
  */
 static void __maybe_unused flash(char *cmd_parameter, char *response)
 {
+#ifdef CONFIG_ITOP4412
+	int ret;
+	char mmcpart_write[64];
+	sprintf(mmcpart_write, "mmcpart write %s %lx %lx", cmd_parameter,
+		(unsigned long)fastboot_buf_addr, (unsigned long)image_size);
+	ret = run_command(mmcpart_write, 0);
+	if(!ret) {
+		fastboot_okay(NULL, response);
+		printf("\npartition: %s write OK !!!\n", cmd_parameter);
+		return;
+	}
+#endif
 	if (IS_ENABLED(CONFIG_FASTBOOT_FLASH_MMC))
 		fastboot_mmc_flash_write(cmd_parameter, fastboot_buf_addr,
 					 image_size, response);

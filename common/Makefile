@@ -8,6 +8,7 @@ ifndef CONFIG_SPL_BUILD
 obj-y += init/
 obj-y += main.o
 obj-y += exports.o
+obj-$(CONFIG_ITOP4412) += itop4412/
 obj-y += cli_getch.o cli_simple.o cli_readline.o
 obj-$(CONFIG_HUSH_OLD_PARSER) += cli_hush.o
 obj-$(CONFIG_HUSH_MODERN_PARSER) += cli_hush_modern.o

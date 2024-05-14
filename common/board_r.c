@@ -66,6 +66,9 @@
 #include <asm-generic/gpio.h>
 #include <efi_loader.h>
 #include <relocate.h>
+#ifdef CONFIG_ITOP4412
+#include <itop4412/common.h>
+#endif
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -738,6 +741,9 @@ static init_fnc_t init_sequence_r[] = {
 	INITCALL_EVENT(EVT_LAST_STAGE_INIT),
 #if defined(CFG_PRAM)
 	initr_mem,
+#endif
+#ifdef CONFIG_ITOP4412
+	itop4412_partition_init,
 #endif
 	run_main_loop,
 };
