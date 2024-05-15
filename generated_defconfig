@@ -355,7 +355,7 @@ CONFIG_HASH=y
 
 # Update support
 
-# CONFIG_ANDROID_AB is not set
+CONFIG_ANDROID_AB=y
 
 
 # Blob list

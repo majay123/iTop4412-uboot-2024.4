@@ -162,12 +162,13 @@ bool dfu_usb_get_reset(void)
 	return !!(readl(&reg->gintsts) & INT_RESET);
 }
 
-__weak void otg_phy_init(struct dwc2_udc *dev) {}
-__weak void otg_phy_off(struct dwc2_udc *dev) {}
+// __weak void otg_phy_init(struct dwc2_udc *dev) {}
+// __weak void otg_phy_off(struct dwc2_udc *dev) {}
 
 /***********************************************************/
 
 #include "dwc2_udc_otg_xfer_dma.c"
+#include "dwc2_udc_otg_phy.c"
 
 /*
  *	udc_disable - disable USB device controller
@@ -224,7 +225,6 @@ static void udc_reinit(struct dwc2_udc *dev)
 static int udc_enable(struct dwc2_udc *dev)
 {
 	debug_cond(DEBUG_SETUP != 0, "%s: %p\n", __func__, dev);
-
 	otg_phy_init(dev);
 	reconfig_usbd(dev);
 
@@ -264,7 +264,6 @@ int usb_gadget_register_driver(struct usb_gadget_driver *driver)
 		return -ENODEV;
 	if (dev->driver)
 		return -EBUSY;
-
 	spin_lock_irqsave(&dev->lock, flags);
 	/* first hook up the driver ... */
 	dev->driver = driver;
@@ -285,7 +284,6 @@ int usb_gadget_register_driver(struct usb_gadget_driver *driver)
 	}
 
 	enable_irq(IRQ_OTG);
-
 	debug_cond(DEBUG_SETUP != 0,
 		   "Registered gadget driver %s\n", dev->gadget.name);
 	udc_enable(dev);
