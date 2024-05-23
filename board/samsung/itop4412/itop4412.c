@@ -22,7 +22,7 @@ u32 get_board_rev(void)
 int exynos_init(void)
 {
 #ifdef CONFIG_USB_ETHER_DM9601
-	debug("---> ready to init usb3503\n");
+	printf("---> ready to init usb3503\n");
 	/* USB3503A Connect */
 	gpio_request(EXYNOS4X12_GPIO_M33, "USB3503A Connect");
 	/* USB3503A Reset */
@@ -70,7 +70,7 @@ struct dwc2_plat_otg_data s5pc210_otg_data = {
 int board_usb_init(int index, enum usb_init_type init)
 {
 #ifdef CONFIG_USB_GADGET
-	debug("USB_udc_probe\n");
+	printf("USB_udc_probe\n");
 	return dwc2_udc_probe(&s5pc210_otg_data);
 #else
 	return 0;

@@ -265,7 +265,7 @@ static int mmcpart_check_input(struct _input_argv *out,
 
 	if (argc < 2)
 		return CMD_RET_USAGE;
-
+	printf("do mmcpart check input\n");
 	out->part = mmcpart_find(argv[1]);
 	if (!out->part) {
 		printf("can't find partition: %s\n"
@@ -328,6 +328,8 @@ static int do_mmcpart_write(struct cmd_tbl *cmdtp,
 
 	if(argc < 3)
 		return CMD_RET_USAGE;
+	
+	printf("do mmpart write\n");
 
 	ret = mmcpart_check_input(&input, argc, argv);
 	if (ret)

@@ -409,7 +409,8 @@ static int dm9601_bind(struct udevice *udev)
 {
 	int ret = 0;
 	u8 env_enetaddr[ETH_ALEN];
-	u8 id, mac[ETH_ALEN];
+	u8 id/* , mac[ETH_ALEN] */;
+	ALLOC_CACHE_ALIGN_BUFFER(unsigned char, mac, ETH_ALEN);
 
 	struct eth_pdata *pdata = dev_get_plat(udev);
 	struct dm9601_private *priv = dev_get_priv(udev);
@@ -688,7 +689,7 @@ static int dm9601_eth_probe(struct udevice *udev)
 	struct ueth_data *dev = &priv->ueth;
 	int ret;
 
-	debug("\n----> %s()\n", __func__);
+	printf("\n----> %s()\n", __func__);
 
 	priv->flags = udev->driver_data;
 	ret = usb_ether_register(udev, dev, DM9601_RX_URB_SIZE);
@@ -705,7 +706,7 @@ static int dm9601_eth_probe(struct udevice *udev)
 
 	/* Get the MAC address */
 	dm9601_read_mac_address(dev, pdata->enetaddr);
-	debug("---->get mac addr: <%02x:%02x:%02x:%02x:%02x:%02x>\n",
+	printf("---->get mac addr: <%02x:%02x:%02x:%02x:%02x:%02x>\n",
 		pdata->enetaddr[0], pdata->enetaddr[1], pdata->enetaddr[2],
 		pdata->enetaddr[3], pdata->enetaddr[4], pdata->enetaddr[5]);
 
