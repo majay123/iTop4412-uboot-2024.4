@@ -171,7 +171,10 @@ static ulong mmc_write_blocks(struct mmc *mmc, lbaint_t start,
 	data.blocksize = mmc->write_bl_len;
 	data.flags = MMC_DATA_WRITE;
 
-	if (mmc_send_cmd(mmc, &cmd, &data)) {
+	int ret = 0;
+	ret = mmc_send_cmd(mmc, &cmd, &data);
+	printf("mmcd send cmd ret = %d\n", ret);
+	if (ret) {
 		printf("mmc write failed\n");
 		return 0;
 	}

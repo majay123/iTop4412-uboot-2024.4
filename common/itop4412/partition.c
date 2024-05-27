@@ -272,6 +272,9 @@ static int mmcpart_check_input(struct _input_argv *out,
 			"please run \"mmcpart show\" ..\n", argv[1]);
 		return CMD_RET_FAILURE;
 	}
+	read_mbr_parts_info();
+	show_parts_info();
+	printf("name: %s, blk_start: %ld, blk_count: %ld, part_id: %d, flag: %d\n", out->part->name, out->part->blk_start, out->part->blk_count, out->part->part_id, out->part->flag);
 
 	if (argc > 2) {
 		out->addr = simple_strtoul(argv[2], NULL, 16);

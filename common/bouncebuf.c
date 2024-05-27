@@ -48,8 +48,10 @@ int bounce_buffer_start_extalign(struct bounce_buffer *state, void *data,
 	if (!addr_is_aligned(state)) {
 		state->bounce_buffer = memalign(alignment,
 						state->len_aligned);
-		if (!state->bounce_buffer)
+		if (!state->bounce_buffer) {
+			printf("\nOut of memory\n");
 			return -ENOMEM;
+		}
 
 		if (state->flags & GEN_BB_READ)
 			memcpy(state->bounce_buffer, state->user_buffer,
